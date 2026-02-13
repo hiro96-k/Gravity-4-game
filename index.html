@@ -398,6 +398,11 @@
                     gameState.grid[`${x},${y}`] = null;
                 }
             }
+            // 最初の一個目を中央下に配置
+            const firstX = 0;
+            const firstY = gameState.gridBounds.minY;
+            gameState.grid[`${firstX},${firstY}`] = 0;
+            gameState.moveHistory.push({ x: firstX, y: firstY, player: 0 });
             
             document.getElementById('setupScreen').classList.add('hidden');
             document.getElementById('gameScreen').classList.remove('hidden');
