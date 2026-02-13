@@ -388,13 +388,13 @@
             
             gameState.currentPlayerIndex = 0;
             gameState.grid = {};
-            // x方向は広く、y方向は従来通り
-            gameState.gridBounds = { minX: -20, maxX: 20, minY: -4, maxY: 4 };
+            // スマホ最適化：横7×縦9（x:-3〜3, y:-4〜4）
+            gameState.gridBounds = { minX: -3, maxX: 3, minY: -4, maxY: 4 };
             gameState.gameOver = false;
             gameState.moveHistory = [];
-            // x方向を広く初期化
+            // 初期グリッド（スマホサイズ）
             for (let y = -4; y <= 4; y++) {
-                for (let x = -20; x <= 20; x++) {
+                for (let x = -3; x <= 3; x++) {
                     gameState.grid[`${x},${y}`] = null;
                 }
             }
@@ -555,16 +555,34 @@
         }
 
         function expandGrid(x, y) {
-            // x方向は無限に広げる
-            if (x < gameState.gridBounds.minX) gameState.gridBounds.minX = x;
-            if (x > gameState.gridBounds.maxX) gameState.gridBounds.maxX = x;
+            // x方向端ならその都度拡張
+            let expanded = false;
+            if (x < gameState.gridBounds.minX) {
+                gameState.gridBounds.minX = x;
+                expanded = true;
+            }
+            if (x > gameState.gridBounds.maxX) {
+                gameState.gridBounds.maxX = x;
+                expanded = true;
+            }
             if (y < gameState.gridBounds.minY) gameState.gridBounds.minY = y;
             if (y > gameState.gridBounds.maxY) gameState.gridBounds.maxY = y;
 
-            // x方向は常に両端+10マス分拡張する
             const { minX, maxX, minY, maxY } = gameState.gridBounds;
+            // 拡張が必要な場合のみ新しい列を追加
+            if (expanded) {
+                for (let newY = minY; newY <= maxY; newY++) {
+                    for (let newX = minX; newX <= maxX; newX++) {
+                        const key = `${newX},${newY}`;
+                        if (!(key in gameState.grid)) {
+                            gameState.grid[key] = null;
+                        }
+                    }
+                }
+            }
+            // y方向拡張時は従来通り
             for (let newY = minY - 1; newY <= maxY + 1; newY++) {
-                for (let newX = minX - 10; newX <= maxX + 10; newX++) {
+                for (let newX = minX; newX <= maxX; newX++) {
                     const key = `${newX},${newY}`;
                     if (!(key in gameState.grid)) {
                         gameState.grid[key] = null;
