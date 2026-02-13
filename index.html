@@ -209,11 +209,98 @@
         .hidden {
             display: none;
         }
+        /* Additional styles for pastel theme */
+        body {
+            font-family: 'Rounded Mplus 1c', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f8e8ee 0%, #e3f6fd 100%);
+        }
+        .container {
+            background: #fffafc;
+            border-radius: 28px;
+            padding: 36px 32px 32px 32px;
+            box-shadow: 0 8px 32px rgba(180, 160, 200, 0.18);
+            max-width: 900px;
+            border: 2px solid #f3d1e6;
+        }
+        h1 {
+            color: #b48ecb;
+            margin-bottom: 24px;
+            font-size: 2.2em;
+            letter-spacing: 0.05em;
+        }
+        .setup label {
+            color: #a48a9e;
+            font-weight: bold;
+            font-size: 1.08em;
+        }
+        .setup select, .setup input {
+            border: 2px solid #e3c6e0;
+            border-radius: 12px;
+            font-size: 17px;
+            margin: 5px;
+            background: #f7f3fa;
+            color: #7d6b7d;
+        }
+        button {
+            background: linear-gradient(90deg, #f7b2d9 0%, #b6e0fe 100%);
+            color: #7d6b7d;
+            border-radius: 28px;
+            font-size: 17px;
+            font-weight: bold;
+            margin: 12px 6px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(200, 180, 220, 0.10);
+        }
+        .info {
+            background: #f6e7f7;
+            border-radius: 18px;
+            font-size: 19px;
+            color: #7d6b7d;
+            border: 1.5px solid #e3c6e0;
+        }
+        .game-board {
+            background: #f6e7f7;
+            border-radius: 18px;
+            padding: 22px;
+            border: 2px solid #e3c6e0;
+        }
+        .grid {
+            background: #f8e8ee;
+            padding: 18px;
+            border-radius: 12px;
+        }
+        .cell {
+            background: #fffafc;
+            border-radius: 10px;
+            border: 2.5px solid #e3c6e0;
+        }
+        .cell:hover:not(.filled) {
+            background: #f7f3fa;
+            transform: scale(1.12);
+        }
+        .player-indicator {
+            background: #fffafc;
+            border-radius: 18px;
+            border: 2.5px solid #e3c6e0;
+            font-size: 1.08em;
+        }
+        .player-indicator.active {
+            border-color: #b48ecb;
+            box-shadow: 0 0 15px rgba(180, 142, 203, 0.18);
+        }
+        .color-circle {
+            border: 2px solid #b48ecb;
+        }
+        .winner-message {
+            color: #b48ecb;
+            margin: 22px 0;
+            font-size: 29px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎮 重力四目並べ</h1>
+        <h1>🎮 4つ並べたら勝ちゲーム</h1>
         
         <div id="setupScreen" class="setup">
             <label>プレイヤー数（2〜5人）:</label>
@@ -246,7 +333,22 @@
     </div>
 
     <script>
-        const PLAYER_COLORS = ['#C9ADA7', '#9A8C98', '#C8B8A8', '#B8A99A', '#D4BEB0'];
+        // より識別しやすい色合いに変更
+        const PLAYER_COLORS = [
+            '#e74c3c', // 赤
+            '#3498db', // 青
+            '#27ae60', // 緑
+            '#f1c40f', // 黄
+            '#9b59b6'  // 紫
+        ];
+        // 柔らかいパステル調の可愛い色合い
+        const PLAYER_COLORS = [
+            '#f7b2d9', // ピンク
+            '#b6e0fe', // 水色
+            '#b6f7c1', // パステルグリーン
+            '#fff6a2', // パステルイエロー
+            '#e3c6e0'  // ラベンダー
+        ];
         let gameState = {
             players: [],
             currentPlayerIndex: 0,
