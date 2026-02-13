@@ -126,7 +126,7 @@
         .grid {
             display: grid;
             grid-column-gap: 0px;
-            grid-row-gap: 8px;
+            grid-row-gap: 0px;
             background: #D4C5B9;
             padding: 15px;
             border-radius: 10px;
@@ -136,6 +136,7 @@
         .cell {
             width: 40px;
             height: 40px;
+            aspect-ratio: 1 / 1;
             background: white;
             border-radius: 4px;
             cursor: pointer;
@@ -621,28 +622,36 @@
         }
 
         function expandGrid(x, y) {
-            // x方向端ならその都度拡張
-            let expanded = false;
+            // x方向端なら1列ずつ拡張
+            let expandedLeft = false;
+            let expandedRight = false;
             if (x < gameState.gridBounds.minX) {
                 gameState.gridBounds.minX = x;
-                expanded = true;
+                expandedLeft = true;
             }
             if (x > gameState.gridBounds.maxX) {
                 gameState.gridBounds.maxX = x;
-                expanded = true;
+                expandedRight = true;
             }
             if (y < gameState.gridBounds.minY) gameState.gridBounds.minY = y;
             if (y > gameState.gridBounds.maxY) gameState.gridBounds.maxY = y;
 
             const { minX, maxX, minY, maxY } = gameState.gridBounds;
-            // 拡張が必要な場合のみ新しい列を追加
-            if (expanded) {
+            // 左端拡張時は左1列だけ追加
+            if (expandedLeft) {
                 for (let newY = minY; newY <= maxY; newY++) {
-                    for (let newX = minX; newX <= maxX; newX++) {
-                        const key = `${newX},${newY}`;
-                        if (!(key in gameState.grid)) {
-                            gameState.grid[key] = null;
-                        }
+                    const key = `${minX},${newY}`;
+                    if (!(key in gameState.grid)) {
+                        gameState.grid[key] = null;
+                    }
+                }
+            }
+            // 右端拡張時は右1列だけ追加
+            if (expandedRight) {
+                for (let newY = minY; newY <= maxY; newY++) {
+                    const key = `${maxX},${newY}`;
+                    if (!(key in gameState.grid)) {
+                        gameState.grid[key] = null;
                     }
                 }
             }
