@@ -333,14 +333,6 @@
     </div>
 
     <script>
-        // より識別しやすい色合いに変更
-        const PLAYER_COLORS = [
-            '#e74c3c', // 赤
-            '#3498db', // 青
-            '#27ae60', // 緑
-            '#f1c40f', // 黄
-            '#9b59b6'  // 紫
-        ];
         // 柔らかいパステル調の可愛い色合い
         const PLAYER_COLORS = [
             '#f7b2d9', // ピンク
@@ -396,13 +388,13 @@
             
             gameState.currentPlayerIndex = 0;
             gameState.grid = {};
-            gameState.gridBounds = { minX: -4, maxX: 4, minY: -4, maxY: 4 };
+            // x方向は広く、y方向は従来通り
+            gameState.gridBounds = { minX: -20, maxX: 20, minY: -4, maxY: 4 };
             gameState.gameOver = false;
             gameState.moveHistory = [];
-            
-            // Initialize a larger grid
+            // x方向を広く初期化
             for (let y = -4; y <= 4; y++) {
-                for (let x = -4; x <= 4; x++) {
+                for (let x = -20; x <= 20; x++) {
                     gameState.grid[`${x},${y}`] = null;
                 }
             }
@@ -558,14 +550,16 @@
         }
 
         function expandGrid(x, y) {
+            // x方向は無限に広げる
             if (x < gameState.gridBounds.minX) gameState.gridBounds.minX = x;
             if (x > gameState.gridBounds.maxX) gameState.gridBounds.maxX = x;
             if (y < gameState.gridBounds.minY) gameState.gridBounds.minY = y;
             if (y > gameState.gridBounds.maxY) gameState.gridBounds.maxY = y;
-            
+
+            // x方向は常に両端+10マス分拡張する
             const { minX, maxX, minY, maxY } = gameState.gridBounds;
             for (let newY = minY - 1; newY <= maxY + 1; newY++) {
-                for (let newX = minX - 1; newX <= maxX + 1; newX++) {
+                for (let newX = minX - 10; newX <= maxX + 10; newX++) {
                     const key = `${newX},${newY}`;
                     if (!(key in gameState.grid)) {
                         gameState.grid[key] = null;
