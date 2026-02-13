@@ -398,11 +398,13 @@
                     gameState.grid[`${x},${y}`] = null;
                 }
             }
-            // 最初の一個目を中央下に配置
+            // 最初の一個目を中央下に配置（プレイヤー1）
             const firstX = 0;
             const firstY = gameState.gridBounds.minY;
             gameState.grid[`${firstX},${firstY}`] = 0;
             gameState.moveHistory.push({ x: firstX, y: firstY, player: 0 });
+            // 次の手番はプレイヤー2
+            gameState.currentPlayerIndex = 1;
             
             document.getElementById('setupScreen').classList.add('hidden');
             document.getElementById('gameScreen').classList.remove('hidden');
