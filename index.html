@@ -622,40 +622,62 @@
         }
 
         function expandGrid(x, y) {
-            // x方向端なら1列ずつ拡張
-            let expandedLeft = false;
-            let expandedRight = false;
-            if (x < gameState.gridBounds.minX) {
-                gameState.gridBounds.minX = x;
-                expandedLeft = true;
-            }
-            if (x > gameState.gridBounds.maxX) {
-                gameState.gridBounds.maxX = x;
-                expandedRight = true;
-            }
+            // y方向は従来通り
             if (y < gameState.gridBounds.minY) gameState.gridBounds.minY = y;
             if (y > gameState.gridBounds.maxY) gameState.gridBounds.maxY = y;
 
-            const { minX, maxX, minY, maxY } = gameState.gridBounds;
-            // 左端拡張時は左1列だけ追加
-            if (expandedLeft) {
-                for (let newY = minY; newY <= maxY; newY++) {
-                    const key = `${minX},${newY}`;
-                    if (!(key in gameState.grid)) {
-                        gameState.grid[key] = null;
+            // x方向：左右端から2列以内にコマが来たら、さらに端側に列を追加
+            // まず、現状のminX/maxXを更新
+            if (x < gameState.gridBounds.minX) gameState.gridBounds.minX = x;
+            if (x > gameState.gridBounds.maxX) gameState.gridBounds.maxX = x;
+
+            // 追加で、左右端から2列以内にコマが来ていないか判定
+            let changed = false;
+            while (true) {
+                const { minX, maxX, minY, maxY } = gameState.gridBounds;
+                let needExpandLeft = false;
+                let needExpandRight = false;
+                // 左端から2列目以内にコマがあるか
+                for (let dx = 0; dx < 2; dx++) {
+                    for (let newY = minY; newY <= maxY; newY++) {
+                        if (gameState.grid[`${minX+dx},${newY}`] !== null && gameState.grid[`${minX+dx},${newY}`] !== undefined) {
+                            needExpandLeft = true;
+                        }
                     }
                 }
-            }
-            // 右端拡張時は右1列だけ追加
-            if (expandedRight) {
-                for (let newY = minY; newY <= maxY; newY++) {
-                    const key = `${maxX},${newY}`;
-                    if (!(key in gameState.grid)) {
-                        gameState.grid[key] = null;
+                // 右端から2列目以内にコマがあるか
+                for (let dx = 0; dx < 2; dx++) {
+                    for (let newY = minY; newY <= maxY; newY++) {
+                        if (gameState.grid[`${maxX-dx},${newY}`] !== null && gameState.grid[`${maxX-dx},${newY}`] !== undefined) {
+                            needExpandRight = true;
+                        }
                     }
                 }
+                if (!needExpandLeft && !needExpandRight) break;
+                if (needExpandLeft) {
+                    gameState.gridBounds.minX--;
+                    for (let newY = minY; newY <= maxY; newY++) {
+                        const key = `${gameState.gridBounds.minX},${newY}`;
+                        if (!(key in gameState.grid)) {
+                            gameState.grid[key] = null;
+                        }
+                    }
+                    changed = true;
+                }
+                if (needExpandRight) {
+                    gameState.gridBounds.maxX++;
+                    for (let newY = minY; newY <= maxY; newY++) {
+                        const key = `${gameState.gridBounds.maxX},${newY}`;
+                        if (!(key in gameState.grid)) {
+                            gameState.grid[key] = null;
+                        }
+                    }
+                    changed = true;
+                }
             }
+
             // y方向拡張時は従来通り
+            const { minX, maxX, minY, maxY } = gameState.gridBounds;
             for (let newY = minY - 1; newY <= maxY + 1; newY++) {
                 for (let newX = minX; newX <= maxX; newX++) {
                     const key = `${newX},${newY}`;
