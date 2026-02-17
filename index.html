@@ -520,20 +520,20 @@
         function renderGrid() {
             const gridElement = document.getElementById('gameGrid');
             gridElement.innerHTML = '';
-            
+
             const { minX, maxX, minY, maxY } = gameState.gridBounds;
             const cols = maxX - minX + 1;
             const rows = maxY - minY + 1;
-            
+
             gridElement.style.gridTemplateColumns = `repeat(${cols}, 50px)`;
-            
+
             for (let y = maxY; y >= minY; y--) {
                 for (let x = minX; x <= maxX; x++) {
                     const cell = document.createElement('div');
                     cell.className = 'cell';
                     cell.dataset.x = x;
                     cell.dataset.y = y;
-                    
+
                     const playerId = gameState.grid[`${x},${y}`];
                     if (playerId !== null && playerId !== undefined) {
                         cell.classList.add('filled');
@@ -541,7 +541,7 @@
                     } else {
                         cell.addEventListener('click', () => handleCellClick(x, y));
                     }
-                    
+
                     gridElement.appendChild(cell);
                 }
             }
@@ -622,63 +622,24 @@
         }
 
         function expandGrid(x, y) {
-            // y方向は従来通り
+            // y方向：コマが置かれた位置に応じてminY/maxYを更新
             if (y < gameState.gridBounds.minY) gameState.gridBounds.minY = y;
             if (y > gameState.gridBounds.maxY) gameState.gridBounds.maxY = y;
 
-            // x方向：左右端から2列以内にコマが来たら、さらに端側に列を追加
-            // まず、現状のminX/maxXを更新
+            // x方向：コマが置かれた位置に応じてminX/maxXを更新
             if (x < gameState.gridBounds.minX) gameState.gridBounds.minX = x;
             if (x > gameState.gridBounds.maxX) gameState.gridBounds.maxX = x;
 
-            // 追加で、左右端から2列以内にコマが来ていないか判定
-            let changed = false;
-            while (true) {
-                const { minX, maxX, minY, maxY } = gameState.gridBounds;
-                let needExpandLeft = false;
-                let needExpandRight = false;
-                // 左端から2列目以内にコマがあるか
-                for (let dx = 0; dx < 2; dx++) {
-                    for (let newY = minY; newY <= maxY; newY++) {
-                        if (gameState.grid[`${minX+dx},${newY}`] !== null && gameState.grid[`${minX+dx},${newY}`] !== undefined) {
-                            needExpandLeft = true;
-                        }
-                    }
-                }
-                // 右端から2列目以内にコマがあるか
-                for (let dx = 0; dx < 2; dx++) {
-                    for (let newY = minY; newY <= maxY; newY++) {
-                        if (gameState.grid[`${maxX-dx},${newY}`] !== null && gameState.grid[`${maxX-dx},${newY}`] !== undefined) {
-                            needExpandRight = true;
-                        }
-                    }
-                }
-                if (!needExpandLeft && !needExpandRight) break;
-                if (needExpandLeft) {
-                    gameState.gridBounds.minX--;
-                    for (let newY = minY; newY <= maxY; newY++) {
-                        const key = `${gameState.gridBounds.minX},${newY}`;
-                        if (!(key in gameState.grid)) {
-                            gameState.grid[key] = null;
-                        }
-                    }
-                    changed = true;
-                }
-                if (needExpandRight) {
-                    gameState.gridBounds.maxX++;
-                    for (let newY = minY; newY <= maxY; newY++) {
-                        const key = `${gameState.gridBounds.maxX},${newY}`;
-                        if (!(key in gameState.grid)) {
-                            gameState.grid[key] = null;
-                        }
-                    }
-                    changed = true;
-                }
-            }
+            // 必ず両端に2列分の猶予を持たせる
+            gameState.gridBounds.minX -= 2;
+            gameState.gridBounds.maxX += 2;
+            // 上下にも2行分の猶予を持たせる
+            gameState.gridBounds.minY -= 2;
+            gameState.gridBounds.maxY += 2;
 
-            // y方向拡張時は従来通り
+            // 新たに拡張された範囲のセルをnullで初期化
             const { minX, maxX, minY, maxY } = gameState.gridBounds;
-            for (let newY = minY - 1; newY <= maxY + 1; newY++) {
+            for (let newY = minY; newY <= maxY; newY++) {
                 for (let newX = minX; newX <= maxX; newX++) {
                     const key = `${newX},${newY}`;
                     if (!(key in gameState.grid)) {
