@@ -22,18 +22,26 @@
         }
 
         .container {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 900px;
+            background: #fffafc;
+            border-radius: 28px;
+            padding: 36px 32px 32px 32px;
+            box-shadow: 0 8px 32px rgba(180, 160, 200, 0.18);
+            max-width: 100vw;
+            width: 100vw;
+            height: 100vh;
+            border: 2px solid #f3d1e6;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         h1 {
-            text-align: center;
-            color: #8B7E74;
-            margin-bottom: 20px;
-            font-size: 2em;
+            color: #b48ecb;
+            margin-bottom: 24px;
+            font-size: 2.2em;
+            letter-spacing: 0.05em;
         }
 
         .setup {
@@ -42,18 +50,18 @@
         }
 
         .setup label {
-            display: block;
-            margin: 15px 0 5px;
-            color: #555;
+            color: #a48a9e;
             font-weight: bold;
+            font-size: 1.08em;
         }
 
         .setup select, .setup input {
-            padding: 10px;
-            border: 2px solid #C4B5A8;
-            border-radius: 10px;
-            font-size: 16px;
+            border: 2px solid #e3c6e0;
+            border-radius: 12px;
+            font-size: 17px;
             margin: 5px;
+            background: #f7f3fa;
+            color: #7d6b7d;
         }
 
         .player-setup {
@@ -72,35 +80,22 @@
         }
 
         button {
-            background: #A69B8E;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 16px;
-            cursor: pointer;
-            margin: 10px 5px;
-            transition: transform 0.2s;
-        }
-
-        button:hover {
-            transform: scale(1.05);
-            background: #8B7E74;
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+            background: linear-gradient(90deg, #f7b2d9 0%, #b6e0fe 100%);
+            color: #7d6b7d;
+            border-radius: 28px;
+            font-size: 17px;
+            font-weight: bold;
+            margin: 12px 6px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(200, 180, 220, 0.10);
         }
 
         .info {
-            text-align: center;
-            margin: 20px 0;
-            padding: 15px;
-            background: #E8E0D5;
-            border-radius: 15px;
-            font-size: 18px;
-            color: #333;
+            background: #f6e7f7;
+            border-radius: 18px;
+            font-size: 19px;
+            color: #7d6b7d;
+            border: 1.5px solid #e3c6e0;
         }
 
         .current-player {
@@ -109,46 +104,49 @@
         }
 
         .game-board {
-            display: inline-block;
-            background: #E8E0D5;
-            border-radius: 15px;
-            padding: 20px;
+            background: #f6e7f7;
+            border-radius: 18px;
+            padding: 8px;
+            border: 2px solid #e3c6e0;
+            max-width: 90vw;
+            max-height: 80vh;
+            width: 90vw;
+            height: 80vh;
             overflow: auto;
-            max-height: 600px;
-            max-width: 100%;
-        }
-
-        .board-wrapper {
-            text-align: center;
-            margin: 20px 0;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .grid {
+            background: #f8e8ee;
+            padding: 8px;
+            border-radius: 12px;
+            width: 100%;
+            height: 100%;
             display: grid;
+            place-items: center;
             grid-column-gap: 0px;
             grid-row-gap: 0px;
-            background: #D4C5B9;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 0 auto;
         }
 
         .cell {
-            width: 40px;
-            height: 40px;
-            aspect-ratio: 1 / 1;
-            background: white;
+            background: #fffafc;
             border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            box-shadow: 0 0 0 1px #e3c6e0;
+            border-left: 1px solid #e3c6e0;
+            border-right: 1px solid #e3c6e0;
+            border-top: none;
+            border-bottom: none;
+            box-sizing: border-box;
+            margin: 0;
+            transition: width 0.2s, height 0.2s;
             position: relative;
         }
 
         .cell:hover:not(.filled) {
-            background: #F5F0EB;
-            transform: scale(1.1);
+            background: #f7f3fa;
+            transform: scale(1.12);
         }
 
         .cell.filled {
@@ -179,14 +177,14 @@
             gap: 10px;
             padding: 10px 20px;
             background: white;
-            border-radius: 4px;
+            border-radius: 18px;
             cursor: pointer;
             transition: all 0.3s;
-            border: 1.5px solid #C4B5A8;
+            border: 2.5px solid #e3c6e0;
             position: relative;
             margin: 0;
-            border-color: #8B7E74;
-            box-shadow: 0 0 15px rgba(139, 126, 116, 0.4);
+            border-color: #b48ecb;
+            box-shadow: 0 0 15px rgba(180, 142, 203, 0.18);
         }
 
         .color-circle {
@@ -200,7 +198,7 @@
             text-align: center;
             font-size: 28px;
             font-weight: bold;
-            color: #8B7E74;
+            color: #b48ecb;
             margin: 20px 0;
             animation: celebration 1s ease-in-out;
         }
@@ -269,16 +267,26 @@
             border-radius: 18px;
             padding: 8px;
             border: 2px solid #e3c6e0;
-            max-width: 100%;
-            overflow-x: auto;
+            max-width: 90vw;
+            max-height: 80vh;
+            width: 90vw;
+            height: 80vh;
+            overflow: auto;
             margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .grid {
             background: #f8e8ee;
             padding: 8px;
             border-radius: 12px;
-            max-width: 100%;
-            overflow-x: auto;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            grid-column-gap: 0px;
+            grid-row-gap: 0px;
         }
         .cell {
             background: #fffafc;
@@ -287,10 +295,10 @@
             border-right: 1px solid #e3c6e0;
             border-top: none;
             border-bottom: none;
-            width: 40px;
-            height: 40px;
             box-sizing: border-box;
             margin: 0;
+            transition: width 0.2s, height 0.2s;
+            position: relative;
         }
         .cell:hover:not(.filled) {
             background: #f7f3fa;
@@ -320,23 +328,21 @@
             padding: 8px 2vw 8px 2vw;
         }
         .game-board {
-            max-width: 100vw;
+            max-width: 100%;
             padding: 2vw;
         }
         .grid {
-            max-width: 100vw;
+            max-width: 100%;
             padding: 2vw;
-            grid-column-gap: 0px;
-            grid-row-gap: 3px;
+            margin: 0 auto;
         }
         .cell {
-            width: 32px;
-            height: 32px;
-            min-width: 24px;
-            min-height: 24px;
-            max-width: 40px;
-            max-height: 40px;
-            border-width: 1px;
+            width: 36px;
+            height: 36px;
+            min-width: 28px;
+            min-height: 28px;
+            max-width: 44px;
+            max-height: 44px;
         }
     @media (max-width: 520px) {
         .container {
@@ -525,7 +531,14 @@
             const cols = maxX - minX + 1;
             const rows = maxY - minY + 1;
 
-            gridElement.style.gridTemplateColumns = `repeat(${cols}, 50px)`;
+            // セルサイズを自動調整
+            // 盤面が広いほどセルを小さくする（最小24px, 最大80px）
+            const cellSizeW = Math.max(24, Math.min(80, Math.floor(0.85 * window.innerWidth / cols)));
+            const cellSizeH = Math.max(24, Math.min(80, Math.floor(0.75 * window.innerHeight / rows)));
+            const cellSize = Math.min(cellSizeW, cellSizeH);
+
+            gridElement.style.gridTemplateColumns = `repeat(${cols}, ${cellSize}px)`;
+            gridElement.style.gridTemplateRows = `repeat(${rows}, ${cellSize}px)`;
 
             for (let y = maxY; y >= minY; y--) {
                 for (let x = minX; x <= maxX; x++) {
@@ -533,6 +546,8 @@
                     cell.className = 'cell';
                     cell.dataset.x = x;
                     cell.dataset.y = y;
+                    cell.style.width = `${cellSize}px`;
+                    cell.style.height = `${cellSize}px`;
 
                     const playerId = gameState.grid[`${x},${y}`];
                     if (playerId !== null && playerId !== undefined) {
