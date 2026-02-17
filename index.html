@@ -626,16 +626,23 @@
             if (y < gameState.gridBounds.minY) gameState.gridBounds.minY = y;
             if (y > gameState.gridBounds.maxY) gameState.gridBounds.maxY = y;
 
-            // x方向：コマが置かれた位置に応じてminX/maxXを更新
-            if (x < gameState.gridBounds.minX) gameState.gridBounds.minX = x;
-            if (x > gameState.gridBounds.maxX) gameState.gridBounds.maxX = x;
-
-            // 必ず両端に2列分の猶予を持たせる
-            gameState.gridBounds.minX -= 2;
-            gameState.gridBounds.maxX += 2;
+            // x方向：端から2列以内にコマが来た場合のみ、その端側に2列分拡張
+            let expandLeft = false;
+            let expandRight = false;
+            for (let dx = 0; dx < 2; dx++) {
+                for (let newY = gameState.gridBounds.minY; newY <= gameState.gridBounds.maxY; newY++) {
+                    if (gameState.grid[`${gameState.gridBounds.minX+dx},${newY}`] !== null && gameState.grid[`${gameState.gridBounds.minX+dx},${newY}`] !== undefined) {
+                        expandLeft = true;
+                    }
+                    if (gameState.grid[`${gameState.gridBounds.maxX-dx},${newY}`] !== null && gameState.grid[`${gameState.gridBounds.maxX-dx},${newY}`] !== undefined) {
+                        expandRight = true;
+                    }
+                }
+            }
+            if (expandLeft) gameState.gridBounds.minX -= 2;
+            if (expandRight) gameState.gridBounds.maxX += 2;
 
             // 上端（maxY）に2行分の猶予を持たせる
-            // maxYから2行以内にコマが来ていればmaxYをさらに+1して空き行を追加
             let needExpandTop = false;
             for (let dy = 0; dy < 2; dy++) {
                 for (let newX = gameState.gridBounds.minX; newX <= gameState.gridBounds.maxX; newX++) {
@@ -644,9 +651,7 @@
                     }
                 }
             }
-            if (needExpandTop) {
-                gameState.gridBounds.maxY++;
-            }
+            if (needExpandTop) gameState.gridBounds.maxY++;
 
             // 新たに拡張された範囲のセルをnullで初期化
             const { minX, maxX, minY, maxY } = gameState.gridBounds;
